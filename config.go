@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-akka/configuration/hocon"
+	"github.com/intabulas/configuration/hocon"
 )
 
 type Config struct {
