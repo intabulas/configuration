@@ -27,6 +27,22 @@ func LoadConfig(filename string) *Config {
 	return ParseString(string(data), defaultIncludeCallback)
 }
 
+func LoadConfigWithIncludeCallback(filename string, includeCallback ...hocon.IncludeCallback) *Config {
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		panic(err)
+	}
+
+	var callback hocon.IncludeCallback
+	if len(includeCallback) > 0 {
+		callback = includeCallback[0]
+	} else {
+		callback = defaultIncludeCallback
+	}
+
+	return ParseString(string(data), callback)
+}
+
 func FromObject(obj interface{}) *Config {
 	data, err := json.Marshal(obj)
 	if err != nil {
