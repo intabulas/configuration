@@ -174,7 +174,7 @@ func (p *HoconTokenizer) PullNext() (token *Token) {
 		return
 	}
 
-	panic(fmt.Errorf("unknown token: %s, offset: %d", p.text, p.index))
+	panic(fmt.Errorf("unknown token: %s, offset: %d", string(p.text[p.index:p.index+1]), p.index))
 }
 
 func (p *HoconTokenizer) isStartOfQuotedKey() bool {
