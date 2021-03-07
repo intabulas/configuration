@@ -183,6 +183,9 @@ func (p *HoconTokenizer) isStartOfQuotedKey() bool {
 
 func (p *HoconTokenizer) PullArrayEnd() *Token {
 	p.TakeOne()
+	if p.IsComma() {
+		p.TakeOne()
+	}
 	return NewToken(TokenTypeArrayEnd)
 }
 
@@ -221,6 +224,9 @@ func (p *HoconTokenizer) PullStartOfObject() *Token {
 
 func (p *HoconTokenizer) PullEndOfObject() *Token {
 	p.TakeOne()
+	if p.IsComma() {
+		p.TakeOne()
+	}
 	return NewToken(TokenTypeObjectEnd)
 }
 
