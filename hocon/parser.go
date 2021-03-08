@@ -78,7 +78,6 @@ func (p *Parser) parseObject(owner *HoconValue, root bool, currentPath string) {
 
 		switch t.tokenType {
 		case TokenTypeInclude:
-			fmt.Println(t.value)
 			included, _ := p.callback(t.value)
 			if included != nil {
 				substitutions := included.substitutions
@@ -218,14 +217,11 @@ func getNode(root *HoconValue, path string) *HoconValue {
 	elements := splitDottedPathHonouringQuotes(path)
 	currentNode := root
 
-	// fmt.Printf("%+v\n", root.GetObject().keys)
-
 	if currentNode == nil {
 		panic("Current node should not be null")
 	}
-	// fmt.Printf("%+v\n", elements)
+
 	for _, key := range elements {
-		// fmt.Printf("Key = %s\n", key)
 		currentNode = currentNode.GetChildObject(key)
 		if currentNode == nil {
 			return nil
