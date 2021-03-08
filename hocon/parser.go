@@ -78,7 +78,10 @@ func (p *Parser) parseObject(owner *HoconValue, root bool, currentPath string) {
 
 		switch t.tokenType {
 		case TokenTypeInclude:
-			included, _ := p.callback(t.value)
+			included, err := p.callback(t.value)
+			if err != nil {
+				fmt.Println(err)
+			}
 			if included != nil {
 				substitutions := included.substitutions
 				for _, substitution := range substitutions {
