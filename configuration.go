@@ -2,6 +2,7 @@ package configuration
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 
 	"github.com/intabulas/configuration/hocon"
@@ -15,6 +16,7 @@ func ParseString(text string, includeCallback ...hocon.IncludeCallback) *Config 
 		callback = defaultIncludeCallback
 	}
 	root := hocon.Parse(text, callback)
+	fmt.Printf("%+v\n", root.Value().GetObject().GetKeys())
 	return NewConfigFromRoot(root)
 }
 

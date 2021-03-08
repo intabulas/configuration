@@ -1,7 +1,6 @@
 package hocon
 
 import (
-	"fmt"
 	"os"
 	"strings"
 )
@@ -214,10 +213,7 @@ func getNode(root *HoconValue, path string) *HoconValue {
 	elements := splitDottedPathHonouringQuotes(path)
 	currentNode := root
 
-	fmt.Printf("%+v\n", root.GetObject().keys)
-	// fmt.Printf("\n\nMONITOR\n\n")
-	// spew.Dump(root.GetChildObject("monitor"))
-	// fmt.Printf("\n\n\n\n")
+	// fmt.Printf("%+v\n", root.GetObject().keys)
 
 	if currentNode == nil {
 		panic("Current node should not be null")
