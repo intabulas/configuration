@@ -27,19 +27,19 @@ func ParseString(text string, includeCallback ...hocon.IncludeCallback) *Config 
 	return NewConfigFromRoot(root)
 }
 
-func LoadConfig(filename string) *Config {
+func LoadConfig(filename string) (*Config, error) {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	return ParseString(string(data), defaultIncludeCallback)
 }
 
-func LoadConfigWithIncludeCallback(filename string, includeCallback ...hocon.IncludeCallback) *Config {
+func LoadConfigWithIncludeCallback(filename string, includeCallback ...hocon.IncludeCallback) (*Config, error) {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	var callback hocon.IncludeCallback
@@ -49,7 +49,7 @@ func LoadConfigWithIncludeCallback(filename string, includeCallback ...hocon.Inc
 		callback = defaultIncludeCallback
 	}
 
-	return ParseString(string(data), callback)
+	return ParseString(string(data), callback), nil
 }
 
 func FromObject(obj interface{}) (*Config, error) {
