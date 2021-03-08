@@ -105,30 +105,31 @@ func (p *HoconObject) Merge(other *HoconObject) {
 	for _, otherkey := range otherKeys {
 
 		otherValue := otherItems[otherkey]
-		if otherkey == "monitor" {
-			fmt.Printf("OtherKey %s\n%+v\n", otherkey, otherValue)
-		}
+		// if otherkey == "monitor" {
+		// 	fmt.Printf("OtherKey %s\n%+v\n", otherkey, otherValue)
+		// }
 		if thisValue, exist := thisValues[otherkey]; exist {
-			if otherkey == "monitor" {
-				fmt.Println("OtherKey Exists")
-			}
+			// if otherkey == "monitor" {
+			// 	fmt.Println("OtherKey Exists")
+			// }
 			if thisValue.IsObject() && otherValue.IsObject() {
 				thisValue.GetObject().Merge(otherValue.GetObject())
-			} else {
-				if otherkey == "monitor" {
-					fmt.Println("CRAP")
-				}
 			}
+			// else {
+			// 	if otherkey == "monitor" {
+			// 		fmt.Println("CRAP")
+			// 	}
+			// }
 		} else {
-			if otherkey == "monitor" {
-				fmt.Println("Adding")
-			}
+			// if otherkey == "monitor" {
+			// 	fmt.Println("Adding")
+			// }
 			p.items[otherkey] = otherValue
 			p.keys = append(p.keys, otherkey)
-			if otherkey == "monitor" {
-				fmt.Printf("%+v\n", p.keys)
-				fmt.Printf("%+v\n", p.items[otherkey])
-			}
+			// if otherkey == "monitor" {
+			// 	fmt.Printf("%+v\n", p.keys)
+			// 	fmt.Printf("%+v\n", p.items[otherkey])
+			// }
 		}
 	}
 }
