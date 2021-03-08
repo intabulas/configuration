@@ -217,7 +217,7 @@ func getNode(root *HoconValue, path string) *HoconValue {
 	elements := splitDottedPathHonouringQuotes(path)
 	currentNode := root
 
-	spew.Dump(root)
+	spew.Dump(root.GetChildObject("monitor"))
 
 	if currentNode == nil {
 		panic("Current node should not be null")
