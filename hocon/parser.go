@@ -78,14 +78,17 @@ func (p *Parser) parseObject(owner *HoconValue, root bool, currentPath string) {
 
 		switch t.tokenType {
 		case TokenTypeInclude:
+			fmt.Println(t.value)
 			included, _ := p.callback(t.value)
-			substitutions := included.substitutions
-			for _, substitution := range substitutions {
-				substitution.Path = currentPath + "." + substitution.Path
+			if included != nil {
+				substitutions := included.substitutions
+				for _, substitution := range substitutions {
+					substitution.Path = currentPath + "." + substitution.Path
+				}
+				p.substitutions = append(p.substitutions, substitutions...)
+				otherObj := included.value.GetObject()
+				owner.GetObject().Merge(otherObj)
 			}
-			p.substitutions = append(p.substitutions, substitutions...)
-			otherObj := included.value.GetObject()
-			owner.GetObject().Merge(otherObj)
 		case TokenTypeEoF:
 		case TokenTypeKey:
 			value := currentObject.GetOrCreateKey(t.value)
