@@ -33,13 +33,13 @@ func LoadConfig(filename string) (*Config, error) {
 		return nil, err
 	}
 
-	return ParseString(string(data), defaultIncludeCallback)
+	return ParseString(string(data), defaultIncludeCallback), nil
 }
 
 func LoadConfigWithIncludeCallback(filename string, includeCallback ...hocon.IncludeCallback) (*Config, error) {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	var callback hocon.IncludeCallback
