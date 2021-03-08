@@ -21,6 +21,7 @@ func Parse(text string, callback IncludeCallback) (*HoconRoot, error) {
 }
 
 func (p *Parser) parseText(text string, callback IncludeCallback) (*HoconRoot, error) {
+
 	p.callback = callback
 	p.root = NewHoconValue()
 	p.reader = NewHoconTokenizer(text)
