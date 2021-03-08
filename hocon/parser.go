@@ -216,6 +216,7 @@ func getNode(root *HoconValue, path string) *HoconValue {
 	elements := splitDottedPathHonouringQuotes(path)
 	currentNode := root
 
+	fmt.Printf("\n\nMONITOR\n\n")
 	spew.Dump(root.GetChildObject("monitor"))
 	fmt.Printf("\n\n\n\n")
 
