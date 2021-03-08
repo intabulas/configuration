@@ -36,7 +36,7 @@ func (p *Parser) parseText(text string, callback IncludeCallback) *HoconRoot {
 			envVal, exist := os.LookupEnv(sub.OrignialPath)
 			if !exist {
 				if !sub.IsOptional {
-					panic("Unresolved substitution:" + sub.Path + sub.OrignialPath)
+					panic("Unresolved substitution: " + sub.Path + " " + sub.OrignialPath)
 				}
 			} else {
 				hv := NewHoconValue()
