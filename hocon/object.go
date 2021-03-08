@@ -103,18 +103,26 @@ func (p *HoconObject) Merge(other *HoconObject) {
 	otherKeys := other.keys
 
 	for _, otherkey := range otherKeys {
-		fmt.Printf("OtherKey %s\n", otherkey)
-		otherValue := otherItems[otherkey]
 
+		otherValue := otherItems[otherkey]
+		if otherkey == "monitor" {
+			fmt.Printf("OtherKey %s\n%+v\n", otherkey, otherValue)
+		}
 		if thisValue, exist := thisValues[otherkey]; exist {
-			fmt.Println("OtherKey Exists")
+			if otherkey == "monitor" {
+				fmt.Println("OtherKey Exists")
+			}
 			if thisValue.IsObject() && otherValue.IsObject() {
 				thisValue.GetObject().Merge(otherValue.GetObject())
 			} else {
-				fmt.Println("CRAP")
+				if otherkey == "monitor" {
+					fmt.Println("CRAP")
+				}
 			}
 		} else {
-			fmt.Println("Adding")
+			if otherkey == "monitor" {
+				fmt.Println("Adding")
+			}
 			p.items[otherkey] = otherValue
 			p.keys = append(p.keys, otherkey)
 		}
