@@ -88,7 +88,7 @@ func (p *Parser) parseObject(owner *HoconValue, root bool, currentPath string) {
 			p.substitutions = append(p.substitutions, substitutions...)
 			otherObj := included.value.GetObject()
 			owner.GetObject().Merge(otherObj)
-			if t.value == "conf/montor.conf" {
+			if t.value == "conf/monitor.conf" {
 				spew.Dump(otherObj)
 			}
 		case TokenTypeEoF:
