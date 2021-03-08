@@ -1,11 +1,8 @@
 package hocon
 
 import (
-	"fmt"
 	"os"
 	"strings"
-
-	"github.com/davecgh/go-spew/spew"
 )
 
 type IncludeCallback func(filename string) *HoconRoot
@@ -79,7 +76,6 @@ func (p *Parser) parseObject(owner *HoconValue, root bool, currentPath string) {
 
 		switch t.tokenType {
 		case TokenTypeInclude:
-			fmt.Println(t.value)
 			included := p.callback(t.value)
 			substitutions := included.substitutions
 			for _, substitution := range substitutions {
@@ -88,9 +84,6 @@ func (p *Parser) parseObject(owner *HoconValue, root bool, currentPath string) {
 			p.substitutions = append(p.substitutions, substitutions...)
 			otherObj := included.value.GetObject()
 			owner.GetObject().Merge(otherObj)
-			if t.value == "conf/monitor.conf" {
-				spew.Dump(otherObj)
-			}
 		case TokenTypeEoF:
 		case TokenTypeKey:
 			value := currentObject.GetOrCreateKey(t.value)
