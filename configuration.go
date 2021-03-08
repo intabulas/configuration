@@ -21,7 +21,8 @@ func ParseString(text string, includeCallback ...hocon.IncludeCallback) *Config 
 	}
 	fmt.Println("")
 	fmt.Println("")
-	fmt.Printf("[%+v]\n", root.Value().GetObject().GetKeys())
+	// fmt.Printf("%+v\n", root.Value().GetObject().GetKeys())
+	fmt.Printf("%+v\n", root.Value().GetChildObject("monitor"))
 	fmt.Println("")
 	fmt.Println("")
 	return NewConfigFromRoot(root)
