@@ -216,6 +216,8 @@ func getNode(root *HoconValue, path string) *HoconValue {
 	elements := splitDottedPathHonouringQuotes(path)
 	currentNode := root
 
+	fmt.Printf("%+v\n\n\n", root.GetObject().keys)
+
 	if currentNode == nil {
 		panic("Current node should not be null")
 	}
