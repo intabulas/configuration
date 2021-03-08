@@ -1,6 +1,7 @@
 package hocon
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
@@ -78,6 +79,7 @@ func (p *Parser) parseObject(owner *HoconValue, root bool, currentPath string) {
 
 		switch t.tokenType {
 		case TokenTypeInclude:
+			fmt.Println(t.value)
 			included := p.callback(t.value)
 			substitutions := included.substitutions
 			for _, substitution := range substitutions {
