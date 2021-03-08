@@ -1,10 +1,9 @@
 package hocon
 
 import (
+	"fmt"
 	"os"
 	"strings"
-
-	"github.com/davecgh/go-spew/spew"
 )
 
 type IncludeCallback func(filename string) *HoconRoot
@@ -31,7 +30,8 @@ func (p *Parser) parseText(text string, callback IncludeCallback) *HoconRoot {
 	root := NewHoconRoot(p.root)
 
 	cRoot := root.Value()
-	spew.Dump(p.substitutions)
+	// spew.Dump(p.substitutions)
+	// spew.Dump(cRoot.GetObject("monitor"))
 	for _, sub := range p.substitutions {
 		res := getNode(cRoot, sub.Path)
 		if res == nil {
@@ -219,8 +219,9 @@ func getNode(root *HoconValue, path string) *HoconValue {
 	if currentNode == nil {
 		panic("Current node should not be null")
 	}
-
+	fmt.Printf("%+v\n", elements)
 	for _, key := range elements {
+		fmt.Printf("Key = %s\n", key)
 		currentNode = currentNode.GetChildObject(key)
 		if currentNode == nil {
 			return nil
