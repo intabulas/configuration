@@ -3,6 +3,8 @@ package hocon
 import (
 	"os"
 	"strings"
+
+	"github.com/davecgh/go-spew/spew"
 )
 
 type IncludeCallback func(filename string) *HoconRoot
@@ -29,7 +31,7 @@ func (p *Parser) parseText(text string, callback IncludeCallback) *HoconRoot {
 	root := NewHoconRoot(p.root)
 
 	cRoot := root.Value()
-
+	spew.Dump(p.substitutions)
 	for _, sub := range p.substitutions {
 		res := getNode(cRoot, sub.Path)
 		if res == nil {
