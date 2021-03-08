@@ -127,6 +127,7 @@ func (p *HoconObject) Merge(other *HoconObject) {
 			p.keys = append(p.keys, otherkey)
 			if otherkey == "monitor" {
 				fmt.Printf("%+v\n", p.keys)
+				fmt.Printf("%+v\n", p.items[otherkey])
 			}
 		}
 	}
