@@ -15,8 +15,10 @@ func ParseString(text string, includeCallback ...hocon.IncludeCallback) *Config 
 	} else {
 		callback = defaultIncludeCallback
 	}
-	root := hocon.Parse(text, callback)
-
+	root, err := hocon.Parse(text, callback)
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.Println("")
 	fmt.Println("")
 	fmt.Printf("[%+v]\n", root.Value().GetObject().GetKeys())
@@ -50,20 +52,16 @@ func LoadConfigWithIncludeCallback(filename string, includeCallback ...hocon.Inc
 	return ParseString(string(data), callback)
 }
 
-func FromObject(obj interface{}) *Config {
+func FromObject(obj interface{}) (*Config, error) {
 	data, err := json.Marshal(obj)
-	if err != nil {
-		panic(err)
-	}
 
-	return ParseString(string(data), defaultIncludeCallback)
+	return ParseString(string(data), defaultIncludeCallback), err
 }
 
-func defaultIncludeCallback(filename string) *hocon.HoconRoot {
+func defaultIncludeCallback(filename string) (*hocon.HoconRoot, error) {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-
 	return hocon.Parse(string(data), defaultIncludeCallback)
 }

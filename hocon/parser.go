@@ -1,11 +1,12 @@
 package hocon
 
 import (
+	"fmt"
 	"os"
 	"strings"
 )
 
-type IncludeCallback func(filename string) *HoconRoot
+type IncludeCallback func(filename string) (*HoconRoot, error)
 
 type Parser struct {
 	reader   *HoconTokenizer
@@ -15,11 +16,11 @@ type Parser struct {
 	substitutions []*HoconSubstitution
 }
 
-func Parse(text string, callback IncludeCallback) *HoconRoot {
+func Parse(text string, callback IncludeCallback) (*HoconRoot, error) {
 	return new(Parser).parseText(text, callback)
 }
 
-func (p *Parser) parseText(text string, callback IncludeCallback) *HoconRoot {
+func (p *Parser) parseText(text string, callback IncludeCallback) (*HoconRoot, error) {
 	p.callback = callback
 	p.root = NewHoconValue()
 	p.reader = NewHoconTokenizer(text)
@@ -35,7 +36,7 @@ func (p *Parser) parseText(text string, callback IncludeCallback) *HoconRoot {
 			envVal, exist := os.LookupEnv(sub.OrignialPath)
 			if !exist {
 				if !sub.IsOptional {
-					panic("Unresolved substitution: " + sub.Path + " " + sub.OrignialPath)
+					return nil, fmt.Errorf("Unresolved substitution: %s and %s", sub.Path, sub.OrignialPath)
 				}
 			} else {
 				hv := NewHoconValue()
@@ -47,7 +48,7 @@ func (p *Parser) parseText(text string, callback IncludeCallback) *HoconRoot {
 		}
 	}
 
-	return NewHoconRoot(p.root, p.substitutions...)
+	return NewHoconRoot(p.root, p.substitutions...), nil
 }
 
 func (p *Parser) parseObject(owner *HoconValue, root bool, currentPath string) {
@@ -76,7 +77,7 @@ func (p *Parser) parseObject(owner *HoconValue, root bool, currentPath string) {
 
 		switch t.tokenType {
 		case TokenTypeInclude:
-			included := p.callback(t.value)
+			included, _ := p.callback(t.value)
 			substitutions := included.substitutions
 			for _, substitution := range substitutions {
 				substitution.Path = currentPath + "." + substitution.Path

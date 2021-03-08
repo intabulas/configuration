@@ -308,13 +308,13 @@ func (p *Config) IsArray(path string) bool {
 }
 
 func (p *Config) AddConfig(textConfig string, fallbackConfig *Config) *Config {
-	root := hocon.Parse(textConfig, nil)
+	root, _ := hocon.Parse(textConfig, nil)
 	config := NewConfigFromRoot(root)
 	return config.WithFallback(fallbackConfig)
 }
 
 func (p *Config) AddConfigWithTextFallback(config *Config, textFallback string) *Config {
-	fallbackRoot := hocon.Parse(textFallback, nil)
+	fallbackRoot, _ := hocon.Parse(textFallback, nil)
 	fallbackConfig := NewConfigFromRoot(fallbackRoot)
 	return config.WithFallback(fallbackConfig)
 }
