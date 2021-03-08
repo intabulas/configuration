@@ -1,11 +1,8 @@
 package hocon
 
 import (
-	"fmt"
 	"os"
 	"strings"
-
-	"github.com/davecgh/go-spew/spew"
 )
 
 type IncludeCallback func(filename string) *HoconRoot
@@ -216,16 +213,16 @@ func getNode(root *HoconValue, path string) *HoconValue {
 	elements := splitDottedPathHonouringQuotes(path)
 	currentNode := root
 
-	fmt.Printf("\n\nMONITOR\n\n")
-	spew.Dump(root.GetChildObject("monitor"))
-	fmt.Printf("\n\n\n\n")
+	// fmt.Printf("\n\nMONITOR\n\n")
+	// spew.Dump(root.GetChildObject("monitor"))
+	// fmt.Printf("\n\n\n\n")
 
 	if currentNode == nil {
 		panic("Current node should not be null")
 	}
 	// fmt.Printf("%+v\n", elements)
 	for _, key := range elements {
-		fmt.Printf("Key = %s\n", key)
+		// fmt.Printf("Key = %s\n", key)
 		currentNode = currentNode.GetChildObject(key)
 		if currentNode == nil {
 			return nil
