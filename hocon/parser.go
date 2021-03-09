@@ -38,7 +38,7 @@ func (p *Parser) parseText(text string, callback IncludeCallback) (*HoconRoot, e
 			if !exist {
 				if !sub.IsOptional {
 					envVal = sub.Path
-					fmt.Printf("Unresolved substitution: %s and %s", sub.Path, sub.OrignialPath)
+					fmt.Printf("Unresolved substitution: %s and %s\n", sub.Path, sub.OrignialPath)
 				}
 			}
 			hv := NewHoconValue()
