@@ -37,13 +37,14 @@ func (p *Parser) parseText(text string, callback IncludeCallback) (*HoconRoot, e
 			envVal, exist := os.LookupEnv(sub.OrignialPath)
 			if !exist {
 				if !sub.IsOptional {
-					return nil, fmt.Errorf("Unresolved substitution: %s and %s", sub.Path, sub.OrignialPath)
+					envVal = sub.Path
+					fmt.Printf("Unresolved substitution: %s and %s", sub.Path, sub.OrignialPath)
 				}
-			} else {
-				hv := NewHoconValue()
-				hv.AppendValue(NewHoconLiteral(envVal))
-				sub.ResolvedValue = hv
 			}
+			hv := NewHoconValue()
+			hv.AppendValue(NewHoconLiteral(envVal))
+			sub.ResolvedValue = hv
+
 		} else {
 			sub.ResolvedValue = res
 		}
