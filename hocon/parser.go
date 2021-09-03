@@ -226,12 +226,8 @@ func getNode(root *HoconValue, path string) *HoconValue {
 	}
 
 	for _, key := range elements {
-		cnode := currentNode.GetChildObject(key)
-		if cnode != nil {
-			fmt.Printf("%+v\n", cnode)
-		}
 		currentNode = currentNode.GetChildObject(key)
-		if currentNode != nil {
+		if currentNode == nil {
 			return nil
 		}
 	}
