@@ -14,7 +14,7 @@ func ParseString(text string, includeCallback ...hocon.IncludeCallback) (*Config
 	} else {
 		callback = defaultIncludeCallback
 	}
-	root, err := hocon.Parse(text, callback)
+	root, err := hocon.Parse(nil, text, callback)
 	if err != nil {
 		return nil, err
 	}
@@ -56,10 +56,10 @@ func FromObject(obj interface{}) (*Config, error) {
 	return ParseString(string(data), defaultIncludeCallback)
 }
 
-func defaultIncludeCallback(filename string) (*hocon.HoconRoot, error) {
+func defaultIncludeCallback(owner *hocon.HoconValue, filename string) (*hocon.HoconRoot, error) {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
-	return hocon.Parse(string(data), defaultIncludeCallback)
+	return hocon.Parse(nil, string(data), defaultIncludeCallback)
 }

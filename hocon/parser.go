@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-type IncludeCallback func(filename string) (*HoconRoot, error)
+type IncludeCallback func(owner *HoconValue, filename string) (*HoconRoot, error)
 
 type Parser struct {
 	reader   *HoconTokenizer
@@ -16,11 +16,11 @@ type Parser struct {
 	substitutions []*HoconSubstitution
 }
 
-func Parse(text string, callback IncludeCallback) (*HoconRoot, error) {
-	return new(Parser).parseText(text, callback)
+func Parse(owner *HoconValue, text string, callback IncludeCallback) (*HoconRoot, error) {
+	return new(Parser).parseText(owner, text, callback)
 }
 
-func (p *Parser) parseText(text string, callback IncludeCallback) (*HoconRoot, error) {
+func (p *Parser) parseText(owner *HoconValue, text string, callback IncludeCallback) (*HoconRoot, error) {
 
 	p.callback = callback
 	p.root = NewHoconValue()
@@ -34,17 +34,23 @@ func (p *Parser) parseText(text string, callback IncludeCallback) (*HoconRoot, e
 	for _, sub := range p.substitutions {
 		res := getNode(cRoot, sub.Path)
 		if res == nil {
-			envVal, exist := os.LookupEnv(sub.OrignialPath)
-			if !exist {
-				if !sub.IsOptional {
-					envVal = sub.Path
-					fmt.Printf("Unresolved substitution: %s and %s\n", sub.Path, sub.OrignialPath)
-				}
+			if owner != nil {
+				res = getNode(owner, sub.Path)
 			}
-			hv := NewHoconValue()
-			hv.AppendValue(NewHoconLiteral(envVal))
-			sub.ResolvedValue = hv
-
+			if res == nil {
+				envVal, exist := os.LookupEnv(sub.OrignialPath)
+				if !exist {
+					if !sub.IsOptional {
+						envVal = sub.Path
+						fmt.Printf("Unresolved substitution: %s and %s\n", sub.Path, sub.OrignialPath)
+					}
+				}
+				hv := NewHoconValue()
+				hv.AppendValue(NewHoconLiteral(envVal))
+				sub.ResolvedValue = hv
+			} else {
+				sub.ResolvedValue = res
+			}
 		} else {
 			sub.ResolvedValue = res
 		}
@@ -79,7 +85,7 @@ func (p *Parser) parseObject(owner *HoconValue, root bool, currentPath string) {
 
 		switch t.tokenType {
 		case TokenTypeInclude:
-			included, err := p.callback(t.value)
+			included, err := p.callback(owner, t.value)
 			if err != nil {
 				fmt.Println(err)
 			}
